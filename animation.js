@@ -6,8 +6,9 @@ var stop = document.getElementById("stop");
 var src = "http://i1-news.softpedia-static.com/images/news2/get-your-windows-10-dvd-player-app-alternatives-488756-3.jpg";
 var rid = 0;
 
-/* start drawing */
-ctx.beginPath();
+/* dimensions */
+var w = svg.getAttribute("width")
+var h = svg.getAttribute("height")
 
 /* stop current animation */
 var stopIt = function() {
@@ -31,8 +32,8 @@ var animateCircle = function(evt) {
     clear();
 
     var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    c.setAttribute("cx", svg.width/2);
-    c.setAttribute("cy", svg.height/2);
+    c.setAttribute("cx", w/2);
+    c.setAttribute("cy", h/2);
     c.setAttribute("stroke", "black");
     c.setAttribute("stroke-width", "1");
     c.setAttribute("fill", "#ffb732");
@@ -53,8 +54,8 @@ var animateCircle = function(evt) {
 
 /* closure structure */
 var animateDVD = function(evt) {
-  var xcor = svg.width/2;
-  var ycor = svg.height/2;
+  var xcor = w/2;
+  var ycor = h/2;
 
   /* change the xval and yval = change in speed */
   var xval = 2;
@@ -66,12 +67,18 @@ var animateDVD = function(evt) {
     clear();
 
     /* remember that images are drawn from the upper left hand corner */
-    ctx.drawImage(img, xcor, ycor, 120, 80);
+    var d = document.createElementNS("http://www.w3.org/2000/svg", "image");
+    d.setAttribute("href", src );
+    d.setAttribute("x", xcor.toString());
+    d.setAttribute("y", ycor.toString());
+    d.setAttribute("height", "80");
+    d.setAttribute("width", "120");
+    svg.appendChild(d);
 
     /* if image hits borders */
-      /* Note: different values are used instead of 0 and svg.width/height due to image whitespace */
-    xval = ( ((xcor + xval) <= -18) || ((xcor + xval) >= (svg.width - 102) ) ) ? -xval : xval;
-    yval = ( ((ycor + yval) <= -10) || ((ycor + yval) >= (svg.height - 70) ) ) ? -yval : yval;
+      /* Note: different values are used instead of 0 and w/height due to image whitespace */
+    xval = ( ((xcor + xval) <= -18) || ((xcor + xval) >= (w - 102) ) ) ? -xval : xval;
+    yval = ( ((ycor + yval) <= -10) || ((ycor + yval) >= (h - 70) ) ) ? -yval : yval;
 
     xcor += xval;
     ycor += yval;
@@ -88,5 +95,4 @@ dvd.addEventListener('click', animateDVD );
 /* stop animation */
 stop.addEventListener("click", function(evt) {
     stopIt();
-    ctx.beginPath();
 });
